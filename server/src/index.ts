@@ -1,25 +1,34 @@
 import express from "express";
-// Use 'import type' for TypeScript interfaces/types when verbatimModuleSyntax is on
 import type { Request, Response, Application } from "express";
 import cors from "cors";
+import { createProxyMiddleware } from "http-proxy-middleware";
 import "dotenv/config";
 
 const app: Application = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Routes
-app.get("/", (req: Request, res: Response) => {
+app.get("/api/health", (req: Request, res: Response) => {
   res.json({
-    message: "Node.js + TypeScript Server is running!",
-    context: "verbatimModuleSyntax is now satisfied",
+    message: "API ok",
+    target: FRONTEND_URL,
   });
 });
 
-// Start Server
+app.use(
+  "/",
+  createProxyMiddleware({
+    target: FRONTEND_URL,
+    changeOrigin: true,
+    ws: true,
+  })
+);
+
 app.listen(PORT, () => {
-  console.log(`[server]: Server is running at http://localhost:${PORT}`);
+  console.log(
+    `[server]: Reverse proxy on http://localhost:${PORT} -> ${FRONTEND_URL}`
+  );
 });

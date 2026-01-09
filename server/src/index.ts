@@ -1,11 +1,9 @@
 import express from "express";
 import type { Request, Response, Application } from "express";
 import cors from "cors";
-import { createProxyMiddleware } from "http-proxy-middleware";
 
 const app: Application = express();
 const PORT = process.env.PORT || 4000;
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
 app.use(cors());
 app.use(express.json());
@@ -13,21 +11,17 @@ app.use(express.json());
 app.get("/api/health", (req: Request, res: Response) => {
   res.json({
     message: "API ok",
-    target: FRONTEND_URL,
+    timestamp: new Date().toISOString(),
   });
 });
 
-app.use(
-  "/",
-  createProxyMiddleware({
-    target: FRONTEND_URL,
-    changeOrigin: true,
-    ws: true,
-  })
-);
+// Add more API-endpoints here
+app.get("/api/data", (req: Request, res: Response) => {
+  res.json({
+    items: ["Item 1", "Item 2", "Item 3"],
+  });
+});
 
 app.listen(PORT, () => {
-  console.log(
-    `[server]: Reverse proxy on http://localhost:${PORT} -> ${FRONTEND_URL}`
-  );
+  console.log(`[server]: Backend API running on http://localhost:${PORT}`);
 });

@@ -1,11 +1,16 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  imports: [RouterOutlet, SidebarComponent],
+  template: `
+    <div class="app-layout">
+      <app-sidebar></app-sidebar>
+    </div>
+  `,
+  styleUrls: ['./app.scss']
 })
 export class App {
   protected readonly title = signal('client');

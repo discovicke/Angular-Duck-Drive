@@ -29,4 +29,17 @@ export class DbService {
     const newList = JSON.stringify(list, null, 4);
     await fs.promises.writeFile(this.filePath, newList, 'utf-8');
   }
+
+  static async upsertFile(fileData: any): Promise<void> {
+    const files = await this.getAllFiles() || [];
+    const existingFileIndex = files.findIndex(f => f.filePath === fileData.filePath);
+
+    if (existingFileIndex !== -1) {
+      files[existingFileIndex] = fileData;
+    } else {
+      files.push(fileData);
+    }
+
+    await this.UpdateListOfFiles(files);
+  }
 }

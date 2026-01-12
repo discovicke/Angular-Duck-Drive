@@ -38,16 +38,23 @@
 // Primary variant - for "Nytt" button
 :host([data-variant='primary']) {
   button {
+    margin: 10px auto;
+    width: 90%;
+    padding: 0.5rem 1.5rem;
     background-color: #fff;
     border: 1px solid #dadce0;
     border-radius: 1.5rem;
-    padding: 0.75rem 1.25rem;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     font-weight: 500;
 
     &:hover {
       background-color: #f8f9fa;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      background-color: #e8e9ea;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     }
   }
 }

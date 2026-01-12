@@ -54,6 +54,27 @@ app.get("/api/files/:id", async (req: Request, res: Response) => {
   res.status(200).json(file);
 });
 
+app.delete("/api/files/:id", async (req: Request, res: Response) => {
+  const fileId = Number(req.params.id);
+  const files = await DbService.getAllFiles();
+
+  if (!files) {
+    return res.status(400).json({ error: "File not found!" });
+  }
+
+  const index = files.findIndex(file => file.id === fileId);
+
+  if (index === -1) {
+    return res.status(404).json({ error: "File not found!" });
+  }
+
+  files.splice(index, 1);
+  await DbService.UpdateListOfFiles(files);
+
+  res.status(200).json(files);
+
+});
+
 app.listen(PORT, () => {
   console.log(`[server]: Backend API running on http://localhost:${PORT}`);
 });

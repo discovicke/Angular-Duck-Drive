@@ -1,12 +1,18 @@
+:host {
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.icon svg {
-  width: 1.25rem;
-  height: 1.25rem;
-  stroke: currentColor;
-  fill: none;
+  .icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    stroke: currentColor;
+  }
+
+  .icon svg path {
+    stroke: red;
+    stroke-width: 1.5rem;
+  }
 }

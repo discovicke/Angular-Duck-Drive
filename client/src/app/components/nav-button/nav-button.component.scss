@@ -21,11 +21,11 @@
     }
 
     &:active {
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: #c2e6fe;
     }
 
     &:focus-visible {
-      outline: 2px solid var(--focus-color, #1a73e8);
+      outline: 2px solid #1a73e8;
       outline-offset: -2px;
     }
 
@@ -38,10 +38,12 @@
 // Primary variant - for "Nytt" button
 :host([data-variant='primary']) {
   button {
+    margin: 10px auto;
+    width: 90%;
+    padding: 0.5rem 1.5rem;
     background-color: #fff;
     border: 1px solid #dadce0;
     border-radius: 1.5rem;
-    padding: 0.75rem 1.25rem;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     font-weight: 500;
 
@@ -49,20 +51,23 @@
       background-color: #f8f9fa;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
     }
+
+    &:active {
+      background-color: #c2e6fe;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
   }
 }
 
 // Secondary variant - for "Få mer lagringsutrymme" button
 :host([data-variant='secondary']) {
   button {
-    background-color: #e8f0fe;
-    color: #1a73e8;
+    margin: 0 auto;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    width: 90%;
+    padding: 0.5rem 1.5rem;
     border-radius: 1rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0.5rem;
     font-weight: 500;
-
-    &:hover {
-      background-color: #d2e3fc;
-    }
   }
 }

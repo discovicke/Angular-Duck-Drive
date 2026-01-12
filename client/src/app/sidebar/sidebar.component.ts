@@ -1,27 +1,29 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IconsComponent } from '../components/icons/icons.component';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { NavButtonComponent } from '../components/nav-button/nav-button.component';
 
 @Component({
   selector: 'app-sidebar',
-  standalone: true,
-  imports: [CommonModule, IconsComponent],
+  imports: [NavButtonComponent],
   template: `
     <nav>
       <button class="new-button"> + Nytt</button>
-      <button *ngFor="let item of navItems" [ngClass]="item.cssClass">
-        <app-icon [name]="item.icon"></app-icon>
-        <span class="label">{{ item.label }}</span>
-      </button>
+      @for (item of navItems; track item.label) {
+        <app-nav-button
+          [label]="item.label"
+          [icon]="item.icon"
+          [cssClass]="item.cssClass"
+        />
+      }
     </nav>
     <hr/>
-    <p>0 byte av 15 GB används</p>
+    <p>0 av 15 GB används</p>
     <button class="get-storage">Få mer lagringsutrymme</button>
   `,
-  styleUrls: ['./sidebar.component.scss'],
+  styleUrl: './sidebar.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarComponent {
-  protected navItems = [
+  protected readonly navItems = [
     { label: 'Startsida', cssClass: 'home-page', icon: 'home' },
     { label: 'Min enhet', cssClass: 'my-unit', icon: 'my-unit' },
     { label: 'Datorer', cssClass: 'computers', icon: 'computer' },

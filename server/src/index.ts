@@ -1,11 +1,9 @@
 import express from "express";
 import type { Request, Response, Application } from "express";
-import cors from "cors";
 
 const app: Application = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
 app.use(express.json());
 
 app.get("/api/health", (req: Request, res: Response) => {

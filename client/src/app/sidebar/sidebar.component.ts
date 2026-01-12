@@ -6,18 +6,19 @@ import { NavButtonComponent } from '../components/nav-button/nav-button.componen
   imports: [NavButtonComponent],
   template: `
     <nav>
-      <button class="new-button"> + Nytt</button>
+      <app-nav-button label="Nytt" icon="plus" variant="primary" cssClass="new-button" />
       @for (item of navItems; track item.label) {
-        <app-nav-button
-          [label]="item.label"
-          [icon]="item.icon"
-          [cssClass]="item.cssClass"
-        />
+      <app-nav-button [label]="item.label" [icon]="item.icon" [cssClass]="item.cssClass" />
       }
     </nav>
-    <hr/>
+    <hr />
     <p>0 av 15 GB används</p>
-    <button class="get-storage">Få mer lagringsutrymme</button>
+    <app-nav-button
+      label="Få mer lagringsutrymme"
+      icon="storage"
+      variant="secondary"
+      cssClass="get-storage"
+    />
   `,
   styleUrl: './sidebar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

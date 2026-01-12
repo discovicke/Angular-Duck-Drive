@@ -27,8 +27,8 @@ export class SidebarComponent {
     { label: 'Datorer', cssClass: 'computers', icon: 'computer' },
     { label: 'Delas med mig', cssClass: 'shared-with-me', icon: 'shared-with-me' },
     { label: 'Senaste', cssClass: 'latest', icon: 'latest' },
-    { label: 'Stjärnmärkt', cssClass: 'marked', icon: 'marked️' },
-    { label: 'Skräppost', cssClass: 'trash', icon: 'trash️' },
+    { label: 'Stjärnmärkt', cssClass: 'marked', icon: 'marked' },
+    { label: 'Skräppost', cssClass: 'trash', icon: 'trash' },
     { label: 'Papperskorg', cssClass: 'bin', icon: 'bin' },
     { label: 'Lagring', cssClass: 'storage', icon: 'storage' },
   ];

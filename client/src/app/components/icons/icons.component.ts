@@ -7,15 +7,13 @@ import { IconService } from './icons.service';
   selector: 'app-icon',
   imports: [CommonModule],
   template: `<span class="icon" [innerHTML]="svg"></span>`,
-  styles: [`ìcons.component.scss`],
+  styleUrls: ['./icons.component.scss'],
 })
 export class IconsComponent {
   svg: SafeHtml | null = null;
 
   @Input() set name(n: string | undefined) {
-    this.svg = n
-      ? this.iconService.get(n)
-      : null;
+    this.svg = n ? this.iconService.get(n) : null;
   }
 
   constructor(private iconService: IconService) {}

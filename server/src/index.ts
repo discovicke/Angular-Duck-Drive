@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import cors from "cors";
 import { fileURLToPath } from "url";
+import { DbService } from "./db.service.js";
 
 const app: Application = express();
 const PORT = process.env.PORT || 4000;
@@ -32,13 +33,25 @@ app.get("/api/data", (req: Request, res: Response) => {
   });
 });
 
-app.get("/api/files", (req: Request, res: Response) => {
-  const filePath = path.join(__dirname, "..", "db.json");
-  res.sendFile(filePath, (err) => {
-    if (err) {
-      res.status(400).json({ error: "Failed to read file metadata." });
-    }
-  });
+// GET: Get list of file metadata
+app.get("/api/files", async (req: Request, res: Response) => {
+  const files = await DbService.getAllFiles();
+  if (!files) {
+    return res.status(404).json({ error: "File not found!" });
+  }
+  res.status(200).json(files);
+});
+
+// GET: Get specific file metadata by ID
+app.get("/api/files/:id", async (req: Request, res: Response) => {
+  const fileId = req.params.id;
+  const file = await DbService.getFileById(Number(fileId));
+
+  if (!file) {
+    return res.status(400).json({ error: "File not found!" });
+  }
+
+  res.status(200).json(file);
 });
 
 app.listen(PORT, () => {

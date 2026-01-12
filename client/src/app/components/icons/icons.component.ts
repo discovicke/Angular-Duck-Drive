@@ -1,20 +1,22 @@
-import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { SafeHtml } from '@angular/platform-browser';
 import { IconService } from './icons.service';
 
 @Component({
   selector: 'app-icon',
   imports: [CommonModule],
-  template: `<span class="icon" [innerHTML]="svg"></span>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `<span class="icon" [innerHTML]="svg()"></span>`,
   styleUrls: ['./icons.component.scss'],
 })
 export class IconsComponent {
-  svg: SafeHtml | null = null;
+  private readonly iconService = inject(IconService);
 
-  @Input() set name(n: string | undefined) {
-    this.svg = n ? this.iconService.get(n) : null;
-  }
+  readonly name = input<string | undefined>();
 
-  constructor(private iconService: IconService) {}
+  readonly svg = computed<SafeHtml | null>(() => {
+    const iconName = this.name();
+    return iconName ? this.iconService.get(iconName) : null;
+  });
 }

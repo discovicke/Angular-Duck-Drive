@@ -20,8 +20,9 @@ app.use(
     })
 );
 
-app.use(express.json({limit: '100mb'}));
-
+// FIX: Removed express.raw. We use JSON because we are sending a DTO.
+// Increased limit to 100mb to handle large Base64 strings.
+app.use(express.json({ limit: '100mb' }));
 
 if(!fs.existsSync(UPLOADS_DIR)){
     fs.mkdirSync(UPLOADS_DIR);
@@ -34,18 +35,12 @@ app.get("/api/health", (req: Request, res: Response) => {
     });
 });
 
-// Add more API-endpoints here
-app.get("/api/data", (req: Request, res: Response) => {
-    res.json({
-        items: ["Item 1", "Item 2", "Item 3"],
-    });
-});
-
 // GET: Get list of file metadata
 app.get("/api/files", async (req: Request, res: Response) => {
     const files = await DbService.getAllFiles();
+    // Return empty array if no files found, which is safer for frontend
     if (!files) {
-        return res.status(404).json({error: "File not found!"});
+        return res.status(200).json([]);
     }
     res.status(200).json(files);
 });
@@ -56,61 +51,75 @@ app.get("/api/files/:id", async (req: Request, res: Response) => {
     const file = await DbService.getFileById(Number(fileId));
 
     if (!file) {
-        return res.status(400).json({error: "File not found!"});
+        return res.status(404).json({error: "File not found!"});
     }
 
     res.status(200).json(file);
 });
 
+// PUT: Upload or update a file
 app.put("/api/files/:filename", async (req: Request, res: Response) => {
     const {filename} = req.params;
     const fileDto: FileDto = req.body;
 
-    console.log('Received:', {filename, body: req.body});
-
-    if(filename === undefined) {
-        return res.status(400).json({error: "Invalid filename"});
+    // 1. Validate URL parameter
+    if (!filename) {
+        return res.status(400).json({error: "No filename provided"});
     }
 
-    if (!fileDto.fileName || !fileDto.fileBody || !fileDto.ownerName) {
-        return res.status(400).json({error: "Invalid file data"});
+    if (filename.includes("/") || filename.includes("\\")) {
+        return res.status(400).json({error: "Folders are not allowed"});
     }
 
-    const fileBuffer = Buffer.from(fileDto.fileBody, 'base64');
+    // 2. INHERITANCE: Force the DTO to use the URL's filename
+    // This ensures they are always identical.
+    fileDto.fileName = filename; 
+
+    // 3. Validate the rest of the DTO
+    // We don't need to check fileDto.fileName anymore because we just set it above.
+    if (!fileDto.fileBody || !fileDto.ownerName) {
+        return res.status(400).json({error: "Invalid file data: missing fileBody or ownerName"});
+    }
+
     const fullPath = path.join(UPLOADS_DIR, filename);
 
     try {
+        const fileBuffer = Buffer.from(fileDto.fileBody, 'base64');
+        
         await fs.promises.writeFile(fullPath, fileBuffer);
 
-        const fileToSave = {
-            ...fileDto,
-            fileBody: fileBuffer.toString('base64'),
+        const fileToSave: FileDto = {
+            fileName: filename, // Explicitly use the URL filename
+            ownerName: fileDto.ownerName,
             uploadedAt: fileDto.uploadedAt || new Date().toISOString(),
             editedAt: new Date().toISOString(),
-            sizeInBytes: fileBuffer.length
+            sizeInBytes: fileBuffer.length,
+            fileBody: fileDto.fileBody 
         };
 
         await DbService.upsertFile(fileToSave);
 
         res.status(200).json({
             message: "File saved",
-            filename: fileDto.fileName,
+            filename,
             size: fileBuffer.length
         });
     } catch (error) {
+        console.error(error);
         res.status(500).json({error: "Failed to save file"});
     }
 });
 
-app.delete("/api/files/:id", async (req: Request, res: Response) => {
-    const fileId = Number(req.params.id);
+// Changed from :id to :filename to match the rest of our logic
+app.delete("/api/files/:filename", async (req: Request, res: Response) => {
+    const filename = req.params.filename;
     const files = await DbService.getAllFiles();
 
     if (!files) {
-        return res.status(400).json({error: "File not found!"});
+        return res.status(404).json({error: "File not found!"});
     }
 
-    const index = files.findIndex(file => file.id === fileId);
+    const index = files.findIndex(file => file.fileName === filename);
 
     if (index === -1) {
         return res.status(404).json({error: "File not found!"});
@@ -119,8 +128,17 @@ app.delete("/api/files/:id", async (req: Request, res: Response) => {
     files.splice(index, 1);
     await DbService.UpdateListOfFiles(files);
 
-    res.status(200).json(files);
+    if (!filename) {
+        return res.status(400).json({error: "No filename provided"})
+    }
 
+    // Delete the physical file
+    const fullPath = path.join(UPLOADS_DIR, filename);
+    if(fs.existsSync(fullPath)) {
+        fs.unlinkSync(fullPath);
+    }
+
+    res.status(200).json(files);
 });
 
 app.listen(PORT, () => {

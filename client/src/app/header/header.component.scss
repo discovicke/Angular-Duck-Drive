@@ -4,7 +4,7 @@
   align-items: center;
   margin-top: 1rem;
   margin-bottom: 1rem;
-
+  justify-content: space-between;
 }
 
 :host {
@@ -42,5 +42,24 @@
   min-width: 0;
 }
 
+.header-icons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 
-/* Ensure each direct child of the header host is a flex row item */
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  app-nav-button {
+    display: inline-flex;
+  }
+
+  app-nav-button button {
+    width: auto;
+    padding: 0.5rem;
+  }
+}
+

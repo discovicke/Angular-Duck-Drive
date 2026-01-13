@@ -5,6 +5,7 @@ import fs from "fs";
 import cors from "cors";
 import {fileURLToPath} from "url";
 import {DbService} from "./db.service.js";
+import type {FileDto} from "../../shared/file-metadata.dto.js";
 
 const app: Application = express();
 const PORT = process.env.PORT || 4000;
@@ -19,13 +20,8 @@ app.use(
     })
 );
 
-app.use("/api/files",
-    express.raw({
-        type: "*/*",
-        limit: "10mb"
-    }))
+app.use(express.json({limit: '100mb'}));
 
-app.use(express.json());
 
 if(!fs.existsSync(UPLOADS_DIR)){
     fs.mkdirSync(UPLOADS_DIR);

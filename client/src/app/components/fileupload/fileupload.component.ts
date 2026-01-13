@@ -1,11 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { FileHandlingService } from '../../services/file-handling.service';
 
 @Component({
   selector: 'app-fileupload',
   imports: [],
-  templateUrl: './fileupload.component.html',
-  styleUrl: './fileupload.component.scss',
+  template: `
+  <input type="file" id="myFile" (change)="onFileSelected($event)" name="myFile">
+  `,
+
+  styleUrls: ['./fileupload.component.scss'],
 })
 export class FileuploadComponent {
 
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    const fileHandlingServiceInjection = inject(FileHandlingService);
+    fileHandlingServiceInjection.content.set(file);
+    console.log(file);
+  }
 }

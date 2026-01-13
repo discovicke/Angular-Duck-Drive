@@ -1,11 +1,10 @@
-import {Injectable, signal} from '@angular/core';
-import { FileDto} from '../../../../shared/file-metadata.dto';
+import { Injectable, signal } from '@angular/core';
+import { FileDto } from '../../../../shared/file-metadata.dto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FileHandlingService {
-
   content = signal<File | null>(null);
 
   convertToBase64(content: File): Promise<string> {
@@ -13,26 +12,29 @@ export class FileHandlingService {
       const reader = new FileReader();
       reader.onload = () => {
         const base64 = (reader.result as string).split(',')[1];
-        console.log(resolve(base64));
+        resolve(base64);
       };
       reader.onerror = reject;
       reader.readAsDataURL(content);
     });
   }
 
-  ConvertToFileDto (file: File): FileDto {
+  async convertToFileDto(file: File): Promise<FileDto> {
+    const base64 = await this.convertToBase64(file);
+
     return {
       fileName: file.name,
-      ownerName: "Kalle Anka",
-      fileBody: this.convertToBase64(file).toString(),
+      ownerName: 'Kalle Anka',
+      fileBody: base64,
     };
   }
 
   /* API saker */
 
-  uploadFile(file: File) {
-    const fileDto = this.ConvertToFileDto(file);
-    return fetch('/api/files/', {
+  async uploadFile(file: File) {
+    const fileDto = await this.convertToFileDto(file);
+
+    return fetch(`/api/files/${file.name}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -49,5 +51,4 @@ export class FileHandlingService {
   Metod upload för att ladda upp fil - anropa PUT i API:n
 
   */
-
 }

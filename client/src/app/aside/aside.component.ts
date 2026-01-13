@@ -7,9 +7,8 @@ import { NavButtonComponent } from '../components/nav-button/nav-button.componen
   template: `
   <aside>
     <nav>
-      <app-nav-button label="Nytt" icon="plus" variant="primary" cssClass="aside-button" />
       @for (item of asideItems; track item.label) {
-      <app-nav-button [label]="item.label" [icon]="item.icon" [cssClass]="item.cssClass" />
+      <app-nav-button [icon]="item.icon" [class]="item.class" />
       }
     </nav>
   <aside>
@@ -19,9 +18,9 @@ import { NavButtonComponent } from '../components/nav-button/nav-button.componen
 })
 export class AsideComponent {
   protected readonly asideItems = [
-    { label: 'Keep', cssClass: 'keep', icon: 'keep' },
-    { label: 'Tasks', cssClass: 'tasks', icon: 'task' },
-    { label: 'Kontakter', cssClass: 'contacts', icon: 'contacts' },
-    { label: 'Hämta tillägg', cssClass: 'get-add-ons', icon: 'add-on' },
+    { label: 'Keep', class: 'keep', icon: 'keep' },
+    { label: 'Tasks', class: 'tasks', icon: 'task' },
+    { label: 'Kontakter', class: 'contacts', icon: 'contacts' },
+    { label: 'Hämta tillägg', class: 'get-add-ons', icon: 'plus' },
   ];
 }

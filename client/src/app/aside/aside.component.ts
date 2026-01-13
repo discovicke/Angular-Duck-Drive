@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NavButtonComponent } from '../components/nav-button/nav-button.component';
 
 @Component({
@@ -14,7 +14,8 @@ import { NavButtonComponent } from '../components/nav-button/nav-button.componen
     </nav>
   <aside>
   `,
-  styleUrl: './aside.component.scss',
+  styleUrls: ['./aside.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AsideComponent {
   protected readonly asideItems = [

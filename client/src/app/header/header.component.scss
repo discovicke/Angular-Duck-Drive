@@ -2,17 +2,22 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  margin-left: 10px;
+  gap: 2rem;
+  h1{
+    font-family: Cygre, NunitoSans, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  }
 }
 
 :host {
+  align-content: space-around;
   background-color: #f8fafd;
-  gap: 10px;
   grid-area: header;
 }
 
 .brand-logo {
-  height: 50px;
-  width: 50px;
+  height: 3.5rem;
+  width: 3.5rem;
 }
 
 .brand-name {

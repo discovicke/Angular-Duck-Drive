@@ -1,5 +1,3 @@
-Here is the updated API documentation, reflecting the **Single Source of Truth** logic where the URL filename dictates the database record name.
-
 ### **API Documentation: File Management System**
 
 **Base URL:** `http://localhost:4000/api`

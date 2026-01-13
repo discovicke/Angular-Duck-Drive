@@ -23,7 +23,6 @@ import { FileuploadComponent } from '../components/fileupload/fileupload.compone
 })
 export class SidebarComponent {
   
-  fileHandlingService = inject(FileHandlingService);
   
   protected readonly navItems = [
     { label: 'Startsida', class: 'home-page', icon: 'home' },
@@ -37,12 +36,5 @@ export class SidebarComponent {
     { label: 'Lagring', class: 'storage', icon: 'storage' },
   ];
 
-  /* constructor () {
-    this.fileHandlingService.convertToBase64();
-  };
 
-  convertToBase64() {
-    reader = new FileReader( )
-    this.fileHandlingService.convertToBase64()
-  }; */
 }

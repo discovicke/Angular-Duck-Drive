@@ -1,5 +1,5 @@
-import { Injectable, signal } from '@angular/core';
-import { FileDto } from '../../../../shared/file-metadata.dto.js';
+import {Injectable, signal} from '@angular/core';
+import { FileDto} from '../../../../shared/file-metadata.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -16,19 +16,37 @@ export class FileHandlingService {
         console.log(resolve(base64));
       };
       reader.onerror = reject;
-      reader.readAsDataURL(content);     
+      reader.readAsDataURL(content);
     });
   }
 
+  ConvertToFileDto (file: File): FileDto {
+    return {
+      fileName: file.name,
+      ownerName: "Kalle Anka",
+      fileBody: this.convertToBase64(file).toString(),
+    };
+  }
 
+  /* API saker */
+
+  uploadFile(file: File) {
+    const fileDto = this.ConvertToFileDto(file);
+    return fetch('/api/files/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(fileDto),
+    });
+  }
 
   /*
-  
-  Metod som konverterar från fil-format till bytes
+
 
   Metod som konverterar från bytes till fil-format
 
-  Metod upload för att ladda upp fil - anropa PUT i APIn
+  Metod upload för att ladda upp fil - anropa PUT i API:n
 
   */
 

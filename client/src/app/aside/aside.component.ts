@@ -7,7 +7,6 @@ import { NavButtonComponent } from '../components/nav-button/nav-button.componen
   template: `
   <aside>
     <nav>
-      <app-nav-button label="Nytt" icon="plus" variant="primary" cssClass="aside-button" />
       @for (item of asideItems; track item.label) {
       <app-nav-button [label]="item.label" [icon]="item.icon" [cssClass]="item.cssClass" />
       }

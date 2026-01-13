@@ -23,11 +23,16 @@ nav {
             height: 1rem;
             stroke: currentColor;
             fill: none;
-            stroke-width: 1.5;;
+            stroke-width: 1.5;
+            ;
         }
 
         &:hover {
             cursor: pointer;
         }
     }
+}
+
+.get-add-ons {
+    margin-top: 2em;
 }

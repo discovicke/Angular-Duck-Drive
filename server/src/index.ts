@@ -5,6 +5,7 @@ import fs from "fs";
 import cors from "cors";
 import {fileURLToPath} from "url";
 import {DbService} from "./db.service.js";
+import type {FileDto} from "../../shared/file-metadata.dto.js";
 
 const app: Application = express();
 const PORT = process.env.PORT || 4000;
@@ -19,13 +20,8 @@ app.use(
     })
 );
 
-app.use("/api/files",
-    express.raw({
-        type: "*/*",
-        limit: "10mb"
-    }))
+app.use(express.json({limit: '100mb'}));
 
-app.use(express.json());
 
 if(!fs.existsSync(UPLOADS_DIR)){
     fs.mkdirSync(UPLOADS_DIR);
@@ -68,38 +64,44 @@ app.get("/api/files/:id", async (req: Request, res: Response) => {
 
 app.put("/api/files/:filename", async (req: Request, res: Response) => {
     const {filename} = req.params;
+    const fileDto: FileDto = req.body;
 
-    if (!filename) {
-        return res.status(400).json({error: "No filename provided"})
+    console.log('Received:', {filename, body: req.body});
+
+    if(filename === undefined) {
+        return res.status(400).json({error: "Invalid filename"});
     }
 
-    if (filename.includes("/") || filename.includes("\\")) {
-        return res.status(400).json({error: "Folders are not allowed"});
+    if (!fileDto.fileName || !fileDto.fileBody || !fileDto.ownerName) {
+        return res.status(400).json({error: "Invalid file data"});
     }
 
+    const fileBuffer = Buffer.from(fileDto.fileBody, 'base64');
     const fullPath = path.join(UPLOADS_DIR, filename);
 
     try {
-        await fs.promises.writeFile(fullPath, req.body);
+        await fs.promises.writeFile(fullPath, fileBuffer);
 
-        await DbService.upsertFile({
-            fileName: filename,
-            ownerName: req.body.ownerName,
-            uploadedAt: new Date().toISOString(),
+        const fileToSave = {
+            ...fileDto,
+            fileBody: fileBuffer.toString('base64'),
+            uploadedAt: fileDto.uploadedAt || new Date().toISOString(),
             editedAt: new Date().toISOString(),
-            sizeInBytes: req.body.length,
-            fileBody: req.body
-        });
+            sizeInBytes: fileBuffer.length
+        };
+
+        await DbService.upsertFile(fileToSave);
 
         res.status(200).json({
             message: "File saved",
-            filename,
-            size: req.body.length
+            filename: fileDto.fileName,
+            size: fileBuffer.length
         });
-    } catch {
+    } catch (error) {
         res.status(500).json({error: "Failed to save file"});
     }
 });
+
 app.delete("/api/files/:id", async (req: Request, res: Response) => {
     const fileId = Number(req.params.id);
     const files = await DbService.getAllFiles();

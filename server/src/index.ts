@@ -46,15 +46,26 @@ app.get("/api/files", async (req: Request, res: Response) => {
 });
 
 // GET: Get specific file metadata by ID
-app.get("/api/files/:id", async (req: Request, res: Response) => {
-  const fileId = req.params.id;
-  const file = await DbService.getFileById(Number(fileId));
+app.get("/api/files/:filename", (req: Request, res: Response) => {
+  const { filename } = req.params;
 
-  if (!file) {
-    return res.status(404).json({ error: "File not found!" });
+  if (!filename) {
+    return res.status(400).json({ error: "No filename provided" });
+  }
+  const fullPath = path.join(UPLOADS_DIR, filename);
+
+  // Säkerhet: Förhindra att man försöker nå filer utanför mappen (Directory Traversal)
+  if (filename.includes("/") || filename.includes("\\")) {
+    return res.status(400).json({ error: "Invalid filename" });
   }
 
-  res.status(200).json(file);
+  // Kontrollera att filen finns fysiskt på disken
+  if (!fs.existsSync(fullPath)) {
+    return res.status(404).json({ error: "File not found on disk" });
+  }
+
+  // Skicka filen! Webbläsaren hanterar detta som en nedladdning eller visning.
+  res.sendFile(fullPath);
 });
 
 // PUT: Upload or update a file

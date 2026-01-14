@@ -10,6 +10,9 @@ import { CONFIG } from "./config.js";
 const app: Application = express();
 const PORT = CONFIG.port;
 
+// Determine if we are in production mode
+const isProduction = process.env.NODE_ENV === "production";
+
 // Use variables from config
 const UPLOADS_DIR = CONFIG.paths.uploads;
 const ANGULAR_DIST_PATH = CONFIG.paths.angularDist;
@@ -18,8 +21,11 @@ const ANGULAR_DIST_PATH = CONFIG.paths.angularDist;
 // Increased limit to 1000mb to handle large Base64 strings.
 app.use(express.json({ limit: "1000mb" }));
 
-// Serve static files from the Angular app
-app.use(express.static(ANGULAR_DIST_PATH));
+// --- PRODUCTION ONLY: Serve Static Files ---
+// In Dev, we rely on 'ng serve' (proxy), so we don't serve these.
+if (isProduction) {
+  app.use(express.static(ANGULAR_DIST_PATH));
+}
 
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR);
@@ -28,6 +34,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 app.get("/api/health", (req: Request, res: Response) => {
   res.json({
     message: "API ok",
+    mode: isProduction ? "Production" : "Development",
     timestamp: new Date().toISOString(),
   });
 });
@@ -169,7 +176,7 @@ app.get("/api/search", async (req: Request, res: Response) => {
   const threshold = query.length < 3 ? -300 : -500;
 
   //fuzzysort.go params: (searchTerm, list, options) --> returnerar en array av resultatobjekt:
-  //{obj: FileDto --> originalobjektet, score: number --> hur bra matchen är, indexes: number [] --> var matchningen sker}
+  // {obj: FileDto --> originalobjektet, score: number --> hur bra matchen är, indexes: number [] --> var matchningen sker}
   const results = fuzzysort.go(query, files, {
     keys: ["fileName"],
     threshold,
@@ -180,13 +187,25 @@ app.get("/api/search", async (req: Request, res: Response) => {
   res.status(200).json(matches);
 });
 
-// Catch-all route: For all other routes, serve the Angular app's index.html
-// This is required if we want to support Angular routing in the frontend.
-app.get("/{*path}", (req: Request, res: Response) => {
-  res.sendFile(path.join(ANGULAR_DIST_PATH, "index.html"));
-});
+// --- PRODUCTION ONLY: Catch-all route ---
+// For all other routes, serve the Angular app's index.html.
+// This supports Angular routing in Prod. In Dev, the proxy handles it.
+if (isProduction) {
+  app.get("/{*path}", (req: Request, res: Response) => {
+    res.sendFile(path.join(ANGULAR_DIST_PATH, "index.html"));
+  });
+}
 
 app.listen(PORT, () => {
   console.log(`[server]: Backend API running on http://localhost:${PORT}`);
-  console.log(`[server]: Serving Angular app from ${ANGULAR_DIST_PATH}`);
+  console.log(
+    `[server]: Environment mode: ${isProduction ? "PRODUCTION" : "DEVELOPMENT"}`
+  );
+  if (isProduction) {
+    console.log(`[server]: Serving Angular app from ${ANGULAR_DIST_PATH}`);
+  } else {
+    console.log(
+      `[server]: Waiting for frontend requests via proxy (ng serve)...`
+    );
+  }
 });

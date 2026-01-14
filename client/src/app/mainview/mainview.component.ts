@@ -1,19 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { FilerowComponent } from '../components/filerow/filerow.component';
+import { FileHandlingService } from '../services/file-handling.service';
 
 @Component({
   selector: 'app-mainview',
-  imports: [],
+  imports: [FilerowComponent],
   template: `
-    <p>Rows</p>
-    <p>on</p>
-    <p>rows</p>
-    <p>on</p>
-    <p>rows</p>
-    <p>on</p>
-    <p>rows</p>
+    <div class="mainview">
+      @for (filerow of FileService.filesList(); track FileService.filesList.name) {
+      <app-filerow></app-filerow>
+      }
+    </div>
   `,
   styleUrl: './mainview.component.scss',
 })
 export class MainviewComponent {
-
+  FileService = inject(FileHandlingService);
 }

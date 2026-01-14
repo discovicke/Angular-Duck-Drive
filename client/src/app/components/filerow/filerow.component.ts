@@ -1,9 +1,10 @@
 import { Component, input } from '@angular/core';
 import { IconsComponent } from '../icons/icons.component';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-filerow',
-  imports: [IconsComponent],
+  imports: [IconsComponent, DatePipe],
   template: `
     <article class="file-row">
       <div class="file-info">
@@ -15,8 +16,8 @@ import { IconsComponent } from '../icons/icons.component';
         </div>
       </div>
       <span class="file-owner">{{ ownerName() }}</span>
-      <span class="file-date">{{ uploadedAt() || '-' }}</span>
-      <span class="file-date">{{ editedAt() || '-' }}</span>
+      <span class="file-date">{{ uploadedAt() | date:'yyyy-MM-dd HH:mm' }}</span>
+      <span class="file-date">{{ editedAt() | date:'yyyy-MM-dd HH:mm'}}</span>
       <span class="file-size">{{ sizeInBytes() }}</span>
       <button class="action-button">
         <app-icon [name]="'download'"></app-icon>

@@ -1,4 +1,5 @@
 .mainview {
+  background: var(--color-main-bg);
   padding: 20px 24px;
   max-width: 100%;
   overflow-x: auto;
@@ -9,11 +10,11 @@
     gap: 16px;
     align-items: center;
     padding: 8px 16px;
-    border-bottom: 1px solid #e8eaed;
+    border-bottom: 1px solid var(--color-surface-2);
     margin-bottom: 4px;
     font-size: 12px;
     font-weight: 500;
-    color: #5f6368;
+    color: var(--color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.3px;
 
@@ -52,7 +53,7 @@
 
     p {
       font-size: 18px;
-      color: #5f6368;
+      color: var(--color-text-muted);
       font-weight: 500;
       margin: 0;
     }
@@ -89,4 +90,3 @@
     }
   }
 }
-

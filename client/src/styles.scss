@@ -1,8 +1,93 @@
 /* You can add global styles to this file, and also import other style files */
 
-// Remove default margin and padding
-/* Register fonts from public/assets/fonts */
+:root {
+  /* Surfaces */
+  --color-panels-bg: #f8f8f8;
+  --color-btn-new-bg: #ffffff;
+  --color-main-bg: #fefeff;
+  --color-surface-hover: #eef1f3;
+  --color-searchbar-bg: #f1f4f4;
+  /* Common surface aliases used in components */
+  --color-surface-app: var(--color-main-bg);
+  --color-surface-1: var(--color-panels-bg);
+  --color-surface-2: #ffffff;
 
+  /* Text */
+  --color-text: #202124;
+  --color-text-muted: #5f6368;
+  --color-text-brand: #505050;
+  --color-text-searchbar: #202124;
+
+  /* Borders / outlines / shadows */
+  --color-border-subtle: rgba(0, 0, 0, 0.08);
+  --color-border-hover: rgba(0, 0, 0, 0.14);
+  --color-outline: #1a73e8;
+  --color-outline-soft: rgba(26, 115, 232, 0.35);
+  --shadow-focus: 0 1px 2px rgba(0, 0, 0, 0.08), 0 0 0 3px rgba(26, 115, 232, 0.20);
+  --shadow-elev-1: 0px 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-elev-1-hover: 0px 1px 3px rgba(0, 0, 0, 0.4);
+  --color-border-nav: #e8eaed;
+
+  /* Brand / actions */
+  --color-primary: #1a73e8;
+  --color-primary-press: #c2e6fe;
+  --color-link: #3582e0;
+
+  /* Buttons / chips */
+  --color-chip: rgb(212, 237, 236);
+  --color-hover-overlay: rgba(0, 0, 0, 0.05);
+  --color-border-strong: rgba(0, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Surfaces */
+    --color-panels-bg: #1b1b1b;
+    --color-btn-new-bg: #37393b;
+    --color-btn-text: #e3e3e3;
+    --color-main-bg: #121212;
+    --color-surface-hover: #2c2c2c;
+    --color-searchbar-bg: #282a2c;
+    /* Common surface aliases used in components */
+    --color-surface-app: var(--color-main-bg);
+    --color-surface-1: var(--color-panels-bg);
+    --color-surface-2: #2c2c2c;
+
+    /* Text */
+    --color-text: #e8eaed;
+    --color-text-muted: #bdc1c6;
+    --color-text-brand: #e1e1e1;
+    --color-hero-text: #c4c7c5;
+    --color-text-searchbar: #e8eaed;
+    --color-text-chip-label: #BBBEBC;
+
+    /* Borders / outlines / shadows */
+    --color-border-subtle: rgba(255, 255, 255, 0.1);
+    --color-border-hover: rgba(255, 255, 255, 0.2);
+    --color-outline: #8ab4f8;
+    --color-outline-soft: rgba(138, 180, 248, 0.35);
+    --shadow-focus: 0 1px 2px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(138, 180, 248, 0.20);
+    --shadow-elev-1: 0px 1px 3px rgba(0, 0, 0, 0.6);
+    --shadow-elev-1-hover: 0px 1px 3px rgba(0, 0, 0, 0.7);
+    --color-border-nav: #5f6368;
+
+    /* Brand / actions */
+    --color-primary: #8ab4f8;
+    --color-primary-press: #3c6df0;
+    --color-link: #82aaff;
+
+    /* Buttons / chips */
+    --color-border-chip: #8e918f;
+    --color-chip: rgb(56, 75, 75);
+    --color-hover-overlay: #004a77;
+    --color-hover-overlay-text: #c2e7ff;
+    --color-border-strong: rgba(255, 255, 255, 0.3);
+    --color-text-chip: #a6c5f8;
+    --color-chip-progressbar: #444746;
+  }
+}
+
+/* Register fonts from public/assets/fonts */
 /* The IDE complains to path
    This fails because asset URLs in Angular CSS are resolved by the build pipeline,
    not by pointing at your repo path. Use the runtime asset path (from assets/)
@@ -24,7 +109,8 @@
   font-display: swap;
 }
 
-/* Global default font */
+/* Global default font
+   Remove default margin and padding */
 html,
 body {
   font-family: NunitoSans, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;

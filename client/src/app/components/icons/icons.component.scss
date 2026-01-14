@@ -4,16 +4,11 @@
     align-items: center;
     justify-content: center;
 
-    ::ng-deep svg {
+    svg {
       width: 1.5rem;
       height: 1.5rem;
       stroke: currentColor;
       stroke-width: 1.5;
     }
-  }
-
-  .icon svg path {
-    stroke: red;
-    stroke-width: 1rem;
   }
 }

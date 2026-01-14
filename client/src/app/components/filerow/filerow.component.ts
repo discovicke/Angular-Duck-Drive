@@ -45,7 +45,7 @@ export class FilerowComponent {
     this.fileService.downloadFile(this.fileName());
   }
 
-  protected onDeleteClick() {
-    console.log('Delete clicked!');
+  protected async onDeleteClick() {
+    await this.fileService.deleteFile(this.fileName());
   }
 }

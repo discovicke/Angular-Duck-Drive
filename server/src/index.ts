@@ -2,28 +2,24 @@ import express from "express";
 import type { Request, Response, Application } from "express";
 import path from "path";
 import fs from "fs";
-import cors from "cors";
-import { fileURLToPath } from "url";
 import { DbService } from "./db.service.js";
 import type { FileDto } from "../../shared/file-metadata.dto.js";
 import fuzzysort from "fuzzysort";
+import { CONFIG } from "./config.js";
 
 const app: Application = express();
-const PORT = process.env.PORT || 4000;
+const PORT = CONFIG.port;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const UPLOADS_DIR = path.resolve(process.cwd(), "uploads");
+// Use variables from config
+const UPLOADS_DIR = CONFIG.paths.uploads;
+const ANGULAR_DIST_PATH = CONFIG.paths.angularDist;
 
-app.use(
-  cors({
-    origin: "http://localhost:4200",
-  })
-);
+// We use JSON because we are sending a DTO.
+// Increased limit to 1000mb to handle large Base64 strings.
+app.use(express.json({ limit: "1000mb" }));
 
-// FIX: Removed express.raw. We use JSON because we are sending a DTO.
-// Increased limit to 100mb to handle large Base64 strings.
-app.use(express.json({ limit: "100mb" }));
+// Serve static files from the Angular app
+app.use(express.static(ANGULAR_DIST_PATH));
 
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR);
@@ -184,6 +180,13 @@ app.get("/api/search", async (req: Request, res: Response) => {
   res.status(200).json(matches);
 });
 
+// Catch-all route: For all other routes, serve the Angular app's index.html
+// This is required if we want to support Angular routing in the frontend.
+app.get("/{*path}", (req: Request, res: Response) => {
+  res.sendFile(path.join(ANGULAR_DIST_PATH, "index.html"));
+});
+
 app.listen(PORT, () => {
   console.log(`[server]: Backend API running on http://localhost:${PORT}`);
+  console.log(`[server]: Serving Angular app from ${ANGULAR_DIST_PATH}`);
 });

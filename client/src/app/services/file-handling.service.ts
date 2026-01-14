@@ -9,6 +9,14 @@ export class FileHandlingService {
   selectedFile = signal<File | null>(null);
   filesList = signal<FileDto[]>([]);
 
+  
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    this.selectedFile.set(file);
+    this.uploadFile(file).then((r) => console.log(r));
+    console.log(file);
+  }
+
   // ========================
   // CONVERSION METHODS
   // ========================

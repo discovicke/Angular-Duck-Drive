@@ -30,7 +30,7 @@ export class DbService {
     return file;
   }
 
-  static async UpdateListOfFiles(list: any[]): Promise<void> {
+  static async updateListOfFiles(list: any[]): Promise<void> {
     const newList = JSON.stringify(list, null, 4);
     await fs.promises.writeFile(this.filePath, newList, "utf-8");
   }
@@ -54,6 +54,6 @@ export class DbService {
       files.push(fileData);
     }
 
-    await this.UpdateListOfFiles(files);
+    await this.updateListOfFiles(files);
   }
 }

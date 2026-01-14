@@ -1,15 +1,27 @@
 import { Component, input } from '@angular/core';
+import { IconsComponent } from '../icons/icons.component';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-filerow',
-  imports: [],
+  imports: [IconsComponent, DatePipe],
   template: `
     <article class="file-row">
-      <span>{{ fileName() }}</span>
-      <span>{{ ownerName() }}</span>
-      <span>{{ uploadedAt() }}</span>
-      <span>{{ editedAt() }}</span>
-      <span>{{ sizeInBytes() }} bytes</span>
+      <div class="file-info">
+        <div class="file-icon">
+          <app-icon [name]="'document'"></app-icon>
+        </div>
+        <div class="file-details">
+          <span class="file-name">{{ fileName() }}</span>
+        </div>
+      </div>
+      <span class="file-owner">{{ ownerName() }}</span>
+      <span class="file-date">{{ uploadedAt() | date:'yyyy-MM-dd HH:mm' }}</span>
+      <span class="file-date">{{ editedAt() | date:'yyyy-MM-dd HH:mm'}}</span>
+      <span class="file-size">{{ sizeInBytes() }}</span>
+      <button class="action-button">
+        <app-icon [name]="'download'"></app-icon>
+      </button>
     </article>
   `,
   styleUrl: './filerow.component.scss',

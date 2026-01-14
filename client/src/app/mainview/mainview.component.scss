@@ -1,0 +1,68 @@
+.mainview {
+  padding: 20px 24px;
+  max-width: 100%;
+  overflow-x: auto;
+
+  .file-list-header {
+    display: grid;
+    grid-template-columns: 1fr 200px 150px 150px 100px 48px;
+    gap: 16px;
+    align-items: center;
+    padding: 8px 16px;
+    border-bottom: 1px solid #e8eaed;
+    margin-bottom: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #5f6368;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+
+    span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .header-name {
+      padding-left: 36px; // Align with file-info content (icon + gap)
+    }
+  }
+
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 1024px) {
+  .mainview .file-list-header {
+    grid-template-columns: 1fr 150px 120px 80px 48px;
+
+    .header-date:last-of-type {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .mainview {
+    padding: 16px 12px;
+
+    .file-list-header {
+      grid-template-columns: 1fr 100px 48px;
+
+      .header-owner,
+      .header-date,
+      .header-size {
+        display: none;
+      }
+
+      .header-name {
+        padding-left: 36px;
+      }
+    }
+  }
+}
+

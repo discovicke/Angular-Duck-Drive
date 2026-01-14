@@ -7,15 +7,25 @@ import { FileHandlingService } from '../services/file-handling.service';
   imports: [FilerowComponent],
   template: `
     <div class="mainview">
-      @for (filerow of FileService.filesList(); track FileService.filesList.name) {
-      <app-filerow
-        [fileName]="filerow.fileName"
-        [ownerName]="filerow.ownerName"
-        [uploadedAt]="filerow.uploadedAt"
-        [editedAt]="filerow.editedAt"
-        [sizeInBytes]="filerow.sizeInBytes"
-      ></app-filerow>
-      }
+      <div class="file-list-header">
+        <span class="header-name">Namn</span>
+        <span class="header-owner">Ägare</span>
+        <span class="header-date">Uppladdad</span>
+        <span class="header-date">Ändrad</span>
+        <span class="header-size">Storlek</span>
+        <span class="header-action"></span>
+      </div>
+      <div class="file-list">
+        @for (filerow of FileService.filesList(); track filerow.fileName) {
+          <app-filerow
+            [fileName]="filerow.fileName"
+            [ownerName]="filerow.ownerName"
+            [uploadedAt]="filerow.uploadedAt"
+            [editedAt]="filerow.editedAt"
+            [sizeInBytes]="filerow.sizeInBytes"
+          ></app-filerow>
+        }
+      </div>
     </div>
   `,
   styleUrl: './mainview.component.scss',

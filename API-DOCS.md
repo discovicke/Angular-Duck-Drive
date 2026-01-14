@@ -181,7 +181,7 @@ const payload = {
 
 4. **Send:** API call uses the filename in the URL:
 ```typescript
-http.put(`/api/files/${actualFileName}`, payload)
+http.put(`/api/files/${FileName}`, payload)
 
 ```
 

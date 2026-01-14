@@ -46,7 +46,7 @@ app.get("/api/files", async (req: Request, res: Response) => {
   res.status(200).json(files);
 });
 
-// GET: Get specific file metadata by ID
+// GET: Get specific file metadata by filename
 app.get("/api/files/:filename", (req: Request, res: Response) => {
   const { filename } = req.params;
 
@@ -55,18 +55,18 @@ app.get("/api/files/:filename", (req: Request, res: Response) => {
   }
   const fullPath = path.join(UPLOADS_DIR, filename);
 
-  // Säkerhet: Förhindra att man försöker nå filer utanför mappen (Directory Traversal)
+  // Security: Prevent accessing files outside the folder (Directory Traversal)
   if (filename.includes("/") || filename.includes("\\")) {
     return res.status(400).json({ error: "Invalid filename" });
   }
 
-  // Kontrollera att filen finns fysiskt på disken
+  // Control that the file exists physically on disk
   if (!fs.existsSync(fullPath)) {
     return res.status(404).json({ error: "File not found on disk" });
   }
 
-  // Skicka filen! Webbläsaren hanterar detta som en nedladdning eller visning.
-  res.sendFile(fullPath);
+  // Send file, letting the browser decide how to handle it (whether to download or display it)
+  res.status(200).sendFile(fullPath);
 });
 
 // PUT: Upload or update a file
@@ -155,7 +155,6 @@ app.delete("/api/files/:filename", async (req: Request, res: Response) => {
   res.status(200).json(files);
 });
 
-
 //Endpoint for search-bar:
 app.get("/api/search", async (req: Request, res: Response) => {
   const query = req.query.q as string;
@@ -177,74 +176,13 @@ app.get("/api/search", async (req: Request, res: Response) => {
   //{obj: FileDto --> originalobjektet, score: number --> hur bra matchen är, indexes: number [] --> var matchningen sker}
   const results = fuzzysort.go(query, files, {
     keys: ["fileName"],
-    threshold, 
+    threshold,
   });
 
   const matches = results.map((r) => r.obj);
 
   res.status(200).json(matches);
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 app.listen(PORT, () => {
   console.log(`[server]: Backend API running on http://localhost:${PORT}`);

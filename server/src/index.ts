@@ -6,6 +6,7 @@ import cors from "cors";
 import { fileURLToPath } from "url";
 import { DbService } from "./db.service.js";
 import type { FileDto } from "../../shared/file-metadata.dto.js";
+import fuzzysort from "fuzzysort";
 
 const app: Application = express();
 const PORT = process.env.PORT || 4000;
@@ -139,7 +140,7 @@ app.delete("/api/files/:filename", async (req: Request, res: Response) => {
   }
 
   files.splice(index, 1);
-  await DbService.UpdateListOfFiles(files);
+  await DbService.updateListOfFiles(files);
 
   if (!filename) {
     return res.status(400).json({ error: "No filename provided" });
@@ -155,6 +156,34 @@ app.delete("/api/files/:filename", async (req: Request, res: Response) => {
 });
 
 
+//Endpoint for search-bar:
+app.get("/api/search", async (req: Request, res: Response) => {
+  const query = req.query.q as string;
+
+  if (!query || query.trim().length === 0) {
+    return res.status(200).json([]);
+  }
+
+  const files = await DbService.getAllFiles();
+
+  if (!files || files.length === 0) {
+    return res.status(200).json([]);
+  }
+
+  //bara resultat med match-score bättre än -1000 (träff närmare 0 = bättre, -1 nästan perfekt, -50 ok, -300 dålig)
+  const threshold = query.length < 3 ? -300 : -500;
+
+  //fuzzysort.go params: (searchTerm, list, options) --> returnerar en array av resultatobjekt:
+  //{obj: FileDto --> originalobjektet, score: number --> hur bra matchen är, indexes: number [] --> var matchningen sker}
+  const results = fuzzysort.go(query, files, {
+    keys: ["fileName"],
+    threshold, 
+  });
+
+  const matches = results.map((r) => r.obj);
+
+  res.status(200).json(matches);
+});
 
 
 

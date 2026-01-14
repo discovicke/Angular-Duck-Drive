@@ -1,15 +1,12 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { NavButtonComponent } from '../components/nav-button/nav-button.component';
-import { FileHandlingService } from '../services/file-handling.service';
-import { FileuploadComponent } from '../components/fileupload/fileupload.component';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [NavButtonComponent, FileuploadComponent],
+  imports: [NavButtonComponent],
   template: `
     <nav>
       <app-nav-button label="Nytt" icon="plus" variant="primary" class="new-button" />
-      <app-fileupload></app-fileupload>
       @for (item of navItems; track item.label) {
       <app-nav-button [label]="item.label" [icon]="item.icon" [class]="item.class" />
       }

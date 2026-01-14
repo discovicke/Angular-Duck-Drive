@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { FileDto } from '../../../../shared/file-metadata.dto';
+import { FileDto } from '../../../../shared/file.dto';
 
 @Injectable({
   providedIn: 'root',
@@ -95,7 +95,7 @@ export class FileHandlingService {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+  }
 
   // GET for SEARCH-results
   async searchAllFiles(query: string): Promise<FileDto[]> {

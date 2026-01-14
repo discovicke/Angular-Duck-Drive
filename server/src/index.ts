@@ -3,7 +3,7 @@ import type { Request, Response, Application } from "express";
 import path from "path";
 import fs from "fs";
 import { DbService } from "./db.service.js";
-import type { FileDto } from "../../shared/file-metadata.dto.js";
+import type { FileDto } from "../../shared/file.dto.js";
 import fuzzysort from "fuzzysort";
 import { CONFIG } from "./config.js";
 

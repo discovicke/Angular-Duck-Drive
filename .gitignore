@@ -4,7 +4,7 @@ node_modules/
 
 dist/
 
-shared/file-metadata.dto.d.ts
-shared/file-metadata.dto.d.ts.map
-shared/file-metadata.dto.js
-shared/file-metadata.dto.js.map
+shared/file.dto.d.ts
+shared/file.dto.d.ts.map
+shared/file.dto.js
+shared/file.dto.js.map

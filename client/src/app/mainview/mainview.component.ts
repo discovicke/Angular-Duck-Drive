@@ -8,7 +8,13 @@ import { FileHandlingService } from '../services/file-handling.service';
   template: `
     <div class="mainview">
       @for (filerow of FileService.filesList(); track FileService.filesList.name) {
-      <app-filerow></app-filerow>
+      <app-filerow
+        [fileName]="filerow.fileName"
+        [ownerName]="filerow.ownerName"
+        [uploadedAt]="filerow.uploadedAt"
+        [editedAt]="filerow.editedAt"
+        [sizeInBytes]="filerow.sizeInBytes"
+      ></app-filerow>
       }
     </div>
   `,

@@ -6,12 +6,13 @@
     'header header header'
     'sidebar main aside';
   height: 100dvh;
+  background-color: var(--color-surface-app);
 }
 
 .main {
-  background-color: #fefeff;
+  background-color: var(--color-surface-1);
   grid-area: main;
   padding: 1rem;
   overflow: auto;
+  border-radius: 1rem 0 0 0;
 }
-

@@ -9,7 +9,7 @@
 
 :host {
   align-content: space-around;
-  background-color: #f8fafd;
+  background-color: var(--color-panels-bg);
   grid-area: header;
 }
 
@@ -31,7 +31,7 @@
     margin: 0;
     line-height: 1;
     font-weight: 400;
-    color: #505050;
+    color: var(--color-text-brand);
     align-self: center;
     user-select: none;
   }
@@ -62,4 +62,3 @@
     padding: 0.5rem;
   }
 }
-

@@ -89,8 +89,7 @@
               "buildTarget": "client:build:production"
             },
             "development": {
-              "buildTarget": "client:build:development",
-              "poll": 2000
+              "buildTarget": "client:build:development"
             }
           },
           "defaultConfiguration": "development"

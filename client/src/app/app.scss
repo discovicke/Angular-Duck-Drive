@@ -7,7 +7,7 @@
     'sidebar main aside';
   height: 100dvh;
   width: 100dvw;
-  background-color: var(--color-surface-app);
+  background-color: var(--color-panels-bg);
 }
 
 .main {
@@ -15,4 +15,16 @@
   grid-area: main;
   padding: 1rem;
   overflow: auto;
+}
+
+// Responsive adjustments
+@media (max-width: 1024px) {
+
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    grid-template-columns: 1fr 2fr;
+    gap: 0.5rem;
+  }
 }

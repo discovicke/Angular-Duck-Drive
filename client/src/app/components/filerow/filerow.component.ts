@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, input} from '@angular/core';
 import { IconsComponent } from '../icons/icons.component';
 import { DatePipe } from '@angular/common';
 import { FileSizePipe } from '../../pipes/file-size.pipe';
@@ -19,8 +19,12 @@ import { FileHandlingService } from '../../services/file-handling.service';
         </div>
       </div>
       <span class="file-owner">{{ ownerName() }}</span>
-      <span class="file-date">{{ uploadedAt() | date : 'yyyy-MM-dd HH:mm' }}</span>
-      <span class="file-date">{{ editedAt() | date : 'yyyy-MM-dd HH:mm' }}</span>
+      <span class="file-date" id="uploadedAt">
+        {{ uploadedAt() | date : (isMobile() ? 'yyyy-MM-dd' : 'yyyy-MM-dd HH:mm') }}
+      </span>
+      <span class="file-date">
+        {{ editedAt() | date : (isMobile() ? 'yyyy-MM-dd' : 'yyyy-MM-dd HH:mm') }}
+      </span>
       <span class="file-size">{{ sizeInBytes() ?? 0 | fileSizePipe }}</span>
       <button class="action-button" (click)="onDownloadClick()">
         <app-icon [name]="'download'"></app-icon>
@@ -49,4 +53,6 @@ export class FilerowComponent {
   protected async onDeleteClick() {
     await this.fileService.deleteFile(this.fileName());
   }
+
+  isMobile = computed(() => window.innerWidth < 1024);
 }

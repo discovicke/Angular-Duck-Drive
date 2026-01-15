@@ -163,7 +163,7 @@ app.delete("/api/files/:filename", async (req: Request, res: Response) => {
     fs.unlinkSync(fullPath);
   }
 
-  res.status(200).json(files);
+  res.status(200).json({ message: "File deleted", filename});
 });
 
 //GET: Endpoint for search-bar functionality
@@ -190,7 +190,7 @@ app.get("/api/search", async (req: Request, res: Response) => {
     threshold,
   });
 
-  const matches = results.map((r) => r.obj);
+  const matches = results.map((r) => r.obj.fileName);
 
   res.status(200).json(matches);
 });

@@ -21,10 +21,12 @@
   width: 234px;
   flex: 0 0 234px;
   padding-left: 1rem;
+
   .brand-logo {
     height: 3rem;
     width: 3rem;
   }
+
   h1 {
     font-family: Cygre, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
     font-size: 1.75em;
@@ -59,5 +61,41 @@
   app-nav-button button {
     width: auto;
     padding: 0.5rem;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 1024px) {
+
+}
+
+@media (max-width: 768px) {
+  :host {
+    display: grid;
+    grid-template-columns: 1fr;
+    min-width: 430px;
+
+    header {
+      gap: 0.5rem;
+
+      .brand {
+        flex: auto;
+        width: auto;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  :host {
+    min-width: 0;
+
+    .brand-logo {
+      display: none;
+    }
+
+    .brand {
+      width: auto;
+    }
   }
 }

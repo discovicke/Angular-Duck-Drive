@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, signal, computed } from '@angular/core';
 import { NavButtonComponent } from '../components/nav-button/nav-button.component';
 import { FileHandlingService } from '../services/file-handling.service';
 import { NewContentComponent } from '../new-content/new-content.component';
@@ -22,7 +22,9 @@ import { FileSizePipe } from '../pipes/file-size.pipe';
       <app-nav-button [label]="item.label" [icon]="item.icon" [class]="item.class" />
       }
     </nav>
-    <hr />
+    <div class="storage-bar">
+      <div class="storage-fill" [style.width.%]="storagePercentage()"></div>
+    </div>
     <p>{{ fileService.usedStorageInBytes() | fileSizePipe }} av 15 GB används</p>
     <app-nav-button label="Få mer lagringsutrymme" variant="secondary" class="get-storage" />
   `,
@@ -33,10 +35,20 @@ export class SidebarComponent {
   fileService = inject(FileHandlingService);
 
   dropdownOpen = signal(false);
+  
+  // Calculate storage percentage (0-100)
+  storagePercentage = computed(() => {
+    const maxStorageInBytes = 15 * 1024 * 1024 * 1024; // 15 GB in bytes
+    const usedBytes = this.fileService.usedStorageInBytes();
+    return Math.min((usedBytes / maxStorageInBytes) * 100, 100);
+  });
+
 
   onNewButtonClick() {
     this.dropdownOpen.update((value) => !value);
   }
+
+
 
   protected readonly navItems = [
     { label: 'Startsida', class: 'home-page', icon: 'home' },

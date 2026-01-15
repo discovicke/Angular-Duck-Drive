@@ -17,7 +17,6 @@
     text-align: left;
     border-radius: 0.25rem;
     transition: background-color 0.15s ease;
-    
 
     &:hover {
       background-color: var(--color-hover-overlay);
@@ -52,9 +51,10 @@
 
 // Primary variant - for "Nytt" button
 :host([data-variant='primary']) {
+  display: inline-block;
+  overflow: visible;
   button {
     margin: 10px 0 10px 15px;
-    width: 45%;
     padding: 0.8rem 1rem;
     background-color: var(--color-btn-new-bg);
     border-radius: 0.8rem;

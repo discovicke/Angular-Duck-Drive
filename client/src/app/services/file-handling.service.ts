@@ -8,9 +8,10 @@ export class FileHandlingService {
   // SIGNALS
   selectedFile = signal<File | null>(null);
   filesList = signal<FileDto[]>([]);
+  allFiles = signal<FileDto[]>([]);
 
   usedStorageInBytes = computed(() => {
-    return this.filesList()
+    return this.allFiles()
       .map((file) => file.sizeInBytes)
       .reduce((totalBytes: number, currentFileSize) => totalBytes + (currentFileSize ?? 0), 0);
   });
@@ -93,6 +94,7 @@ export class FileHandlingService {
 
     const filesData = (await response.json()) as FileDto[];
     this.filesList.set(filesData);
+    this.allFiles.set(filesData);
     console.log('Fetched files:', filesData);
     return filesData;
   }
@@ -145,6 +147,7 @@ export class FileHandlingService {
     if (response.ok) {
       // Update the local signal by filtering out the deleted file
       this.filesList.update((files) => files.filter((f) => f.fileName !== filename));
+      this.allFiles.update((files) => files.filter((f) => f.fileName !== filename));
       return true;
     }
 

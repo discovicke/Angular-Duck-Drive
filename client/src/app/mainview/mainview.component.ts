@@ -11,7 +11,7 @@ import { FileHandlingService } from '../services/file-handling.service';
         <div class="file-list-header">
           <span class="header-name">Namn</span>
           <span class="header-owner">Ägare</span>
-          <span class="header-date">Uppladdad</span>
+          <span class="header-date" id="headerUploadedAt">Uppladdad</span>
           <span class="header-date">Ändrad</span>
           <span class="header-size">Storlek</span>
           <span class="header-action"></span>

@@ -54,5 +54,5 @@ export class FilerowComponent {
     await this.fileService.deleteFile(this.fileName());
   }
 
-  isMobile = computed(() => window.innerWidth < 1024);
+  isMobile = computed(() => window.innerWidth < 1400);
 }

@@ -16,3 +16,15 @@
   padding: 1rem;
   overflow: auto;
 }
+
+// Responsive adjustments
+@media (max-width: 1024px) {
+
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    grid-template-columns: 1fr 2fr;
+    gap: 0.5rem;
+  }
+}

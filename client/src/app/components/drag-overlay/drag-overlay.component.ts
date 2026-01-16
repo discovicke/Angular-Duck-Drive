@@ -8,8 +8,7 @@ import {Overlay} from '@angular/cdk/overlay';
 <div class="drag-overlay-content">
   <p>Släpp filen här</p>
 </div>`,
-  styleUrl: './drag-overlay.component.scss',
-})
+  styleUrls: ['./drag-overlay.component.scss'],})
 export class DragOverlayComponent {
 
   constructor(private overlay: Overlay) {

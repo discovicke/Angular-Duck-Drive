@@ -127,3 +127,13 @@ body {
     border: 1px solid var(--color-border-hover);
   }
 }
+
+.drag-overlay-backdrop {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.drag-overlay-panel,
+.drag-overlay-backdrop,
+.cdk-overlay-wrapper .cdk-overlay-pane{
+  pointer-events: none;
+}

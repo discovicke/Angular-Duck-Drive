@@ -1,45 +1,60 @@
-import {Directive, HostListener, signal, output, ElementRef, inject} from '@angular/core';
-import { DragOverlayComponent } from '../components/drag-overlay/drag-overlay.component';
-import { Overlay } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { OverlayRef } from '@angular/cdk/overlay';
-import {MainviewComponent} from '../mainview/mainview.component';
+import { Directive, EventEmitter, HostListener, Output, ElementRef, inject } from '@angular/core';
 
 @Directive({
   selector: '[appDragAndDrop]',
 })
 export class DragAndDropDirective {
+  @Output() fileDropped = new EventEmitter<File>();
+  @Output() dragOver = new EventEmitter<void>();
+  @Output() dragLeave = new EventEmitter<void>();
 
   private elementRef = inject(ElementRef);
-  private overlay = inject(Overlay);
-  fileDropped = output<File>();
-  private overlayRef: OverlayRef | null = null;
-  portal = new ComponentPortal(DragOverlayComponent);
+  private isDragging = false;
 
-  @HostListener('dragover', ['$event'])
-  handleOnDragover(event: DragEvent): void {
+  @HostListener('document:dragenter', ['$event'])
+  onDocumentDragEnter(event: DragEvent): void {
     event.preventDefault();
+    const isOverHost = this.elementRef.nativeElement.contains(event.target as Node);
+    const isOverOverlay = (event.target as HTMLElement)?.closest('.cdk-overlay-container');
 
-    if (!this.overlayRef) {
-
+    if ((isOverHost || isOverOverlay) && !this.isDragging) {
+      this.isDragging = true;
+      this.dragOver.emit();
     }
-    console.log('nu drar jag över');
   }
 
-  @HostListener('dragleave', ['$event'])
-  handleLeave(event: DragEvent): void {
+  @HostListener('document:dragover', ['$event'])
+  onDocumentDragOver(event: DragEvent): void {
     event.preventDefault();
-    console.log('nu drar jag iväg');
   }
 
-  @HostListener('drop', ['$event'])
-  handleDrop(event: DragEvent): void {
+  @HostListener('document:dragleave', ['$event'])
+  onDocumentDragLeave(event: DragEvent): void {
     event.preventDefault();
-    event.stopPropagation();
-    const file = event.dataTransfer?.files[0];
-    console.log('nu släpper jag');
-    if (file) {
-      this.fileDropped.emit(file);
+    const relatedTarget = event.relatedTarget as Node | null;
+    const isLeavingToHost = relatedTarget && this.elementRef.nativeElement.contains(relatedTarget);
+    const isLeavingToOverlay = relatedTarget && (relatedTarget as HTMLElement)?.closest?.('.cdk-overlay-container');
+
+    if (!relatedTarget || (!isLeavingToHost && !isLeavingToOverlay)) {
+      if (this.isDragging) {
+        this.isDragging = false;
+        this.dragLeave.emit();
+      }
+    }
+  }
+
+  @HostListener('document:drop', ['$event'])
+  onDocumentDrop(event: DragEvent): void {
+    event.preventDefault();
+    const isOverHost = this.elementRef.nativeElement.contains(event.target as Node);
+    const isOverOverlay = (event.target as HTMLElement)?.closest('.cdk-overlay-container');
+
+    if (isOverHost || isOverOverlay) {
+      this.isDragging = false;
+      const files = event.dataTransfer?.files;
+      if (files && files.length > 0) {
+        this.fileDropped.emit(files[0]);
+      }
     }
   }
 }

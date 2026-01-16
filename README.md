@@ -1,4 +1,4 @@
-# Projekt — Enkel filhanterare
+# Duck Drive - En lokal selfhosting filhanterare byggd i Angular
 
 En liten och vänlig demo för att ladda upp, ladda ner och radera filer mot en lokal Node-server, med fokus på att lära oss ramverket Angular och skapa utifrån dess arbetsflöde.
 

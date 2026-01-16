@@ -118,7 +118,6 @@ export class FileHandlingService {
 
     if (!response.ok) {
       return [];
-      //TODO: lägga in en länk till den "tomma" sidan?
     }
 
     const results = (await response.json()) as FileDto[];

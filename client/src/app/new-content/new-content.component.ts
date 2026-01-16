@@ -4,19 +4,17 @@ import { FileHandlingService } from '../services/file-handling.service';
 @Component({
   selector: 'app-new-content',
   imports: [],
-  template: ` @if (open()) {
+  template: `
     <select name="new-content" class="new-content" (change)="onSelectChange($event)">
       <option value="folder">Ladda upp ny mapp</option>
       <option value="file">Ladda upp ny fil</option>
     </select>
-    }`,
+    `,
   styleUrls: ['./new-content.component.scss'],
 })
 export class NewContentComponent {
   FileService = inject(FileHandlingService);
 
-  open = input<boolean>(false);
-  close = output<void>();
 
   onSelectChange(event: Event) {
     const select = event.target as HTMLSelectElement;
@@ -38,8 +36,6 @@ export class NewContentComponent {
         this.FileService.onFileSelected(fileToReturn);
         document.body.removeChild(input);
 
-        // Close the dropdown after file selection
-        this.close.emit();
       });
 
       document.body.appendChild(input);

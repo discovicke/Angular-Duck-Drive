@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Overlay} from '@angular/cdk/overlay';
 
 @Component({
   selector: 'app-drag-overlay',
@@ -10,5 +11,8 @@ import { Component } from '@angular/core';
   styleUrl: './drag-overlay.component.scss',
 })
 export class DragOverlayComponent {
+
+  constructor(private overlay: Overlay) {
+  }
 
 }

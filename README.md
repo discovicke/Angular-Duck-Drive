@@ -1,57 +1,32 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/Yq2osyvW)
+# Projekt — Enkel filhanterare
 
-### 🎯 Projektöversikt
+En liten och vänlig demo för att ladda upp, ladda ner och radera filer mot en lokal Node-server, med fokus på att lära oss ramverket Angular och skapa utifrån dess arbetsflöde.
 
-Ni ska skapa en **Proof of Concept (PoC)** för en molnlagringstjänst. Målet är en "renare" version av Google Drive utan reklam och popups. Fokus ligger på att demonstrera hur ni hanterar komponenter och dataflöden i Angular.
+## Huvudfunktioner
+- Drag & drop för uppladdning: Dra en fil över `mainview` för att ladda upp.
+- Visning av filer: Lista med namn, ägare, datum och storlek.
+- Ladda ner: Klicka för att ladda ner en fil från servern.
+- Radera: Ta bort filer från både UI och server.
+- Proxy routing: Dev-servern proxar API-anrop till den lokala Node-servern.
+- Lokalt uppladdningslager: Filer sparas i `server/uploads/`.
 
-### 🧱 Krav för Godkänt (G) - Frontend & Komponenter
+## Kör lokalt
+1. Starta backend (i `server/`):
+   - `cd server`
+   - `npm install`
+   - `npm run dev` (eller `npm start` beroende på skriptet)
 
-Fokus på att bygga UI med Angular-komponenter. Ingen backend krävs (data kan ligga i minnet eller `localStorage`).
+2. Starta frontend (i `client/`):
+   - `cd client`
+   - `npm install`
+   - `npm start` (kör Angular dev-server med `proxy.conf.json`)
 
-**Design:**
+3. Öppna appen i webbläsaren:
+   - `http://localhost:4200`
 
-* Vänstermeny (Sidebar) – behöver inte vara klickbar, men ska visa hur knappar stylas.
-* Huvudvy – En lista med filer i mitten.
-* Funktionalitet – Kunna ladda upp och ladda ner filer (mockat).
+## Anteckningar
+- Proxy-configen (`client/proxy.conf.json`) skickar API-anrop till Node-servern så CORS hanteras enkelt under utveckling.
+- Uppladdningar sparas i `server/uploads/`.
+- Drag-overlay visar visuellt när en fil dras över `mainview`. UI stänger overlay vid drop eller när musen lämnar området.
 
-**Obligatoriska Angular-komponenter:**
-
-1. **Sidebar:** Behållaren för vänstermenyn.
-2. **Knapp-komponent:** Ska återanvändas för menyvalen (t.ex. "Min enhet"). Ska ta emot text och ev. ikon som input.
-3. **Filvy-komponent:** Behållaren för sökfältet och fillistan.
-4. **Sökfälts-komponent:** Visuell (behöver inte fungera för G).
-5. **Filrads-komponent:** Presentation av en enskild fil (namn, ikon, datum etc.).
-
-### ⭐ Krav för Väl Godkänt (VG) - Backend, Styling & Sök
-
-Här krävs en riktig server och mer avancerad frontend.
-
-**1. Styling & UX:**
-
-* Responsiv design (anpassad för mobil).
-* **Tema:** Ljust/Mörkt läge (ska styras av webbläsarens inställningar, `prefers-color-scheme`).
-
-**2. Node.js Server:**
-
-* Ska kunna serva den byggda Angular-applikationen (statisk HTML/JS/CSS).
-* Ska spara uppladdade filer fysiskt på serverns disk.
-
-**3. REST-API (Endpoints):**
-
-* `PUT api/files/*` – Skapa/Ersätt fil (body innehåller filens bytes).
-* `GET api/files` – Lista alla filer.
-* `GET api/files/*` – Ladda ner specifik fil.
-* `DELETE api/files/*` – Ta bort fil.
-
-**4. Funktionalitet:**
-
-* **Sök:** Sökfältet måste fungera (filtrera på namn/typ). "Fuzzy search" rekommenderas starkt.
-
-### ⚠️ Viktiga begränsningar & Regler
-
-* **Framework only:** Ingen `.innerHTML` eller `document.createElement`. All DOM-manipulation måste ske via Angular ("The Angular Way").
-* **NPM:** Var restriktiv med externa paket. Oscar (ledningen) gillar inte onödiga beroenden, så varje paket måste motiveras.
-
-
-Färg till bakgrundsbild vid no files:
-#A0A4A8 - bör funka till både ljust och mörkt tema
+Tack — hoppas detta hjälper dig att komma igång!
